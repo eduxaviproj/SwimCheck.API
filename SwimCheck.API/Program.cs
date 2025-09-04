@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SwimCheck.API.Data;
+using SwimCheck.API.Mappings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,10 @@ builder.Services.AddSwaggerGen();
 //EF Core + SQL Server
 builder.Services.AddDbContext<SwimCheckDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
 
 var app = builder.Build();
 
