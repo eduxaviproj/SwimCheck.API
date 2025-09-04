@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SwimCheck.API.Data;
 using SwimCheck.API.Mappings;
+using SwimCheck.API.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<SwimCheckDbContext>(options =>
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+// Repositories
+builder.Services.AddScoped<IAthleteRepository, SQLAthleteRepository>();
 
 
 var app = builder.Build();

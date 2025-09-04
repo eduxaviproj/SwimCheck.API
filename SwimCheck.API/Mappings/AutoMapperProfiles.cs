@@ -26,7 +26,6 @@ namespace SwimCheck.API.Mappings
             CreateMap<Race, RaceReadDTO>()
                 .ForMember(dest => dest.Stroke, opt => opt.MapFrom(src => src.Stroke.ToString()))
                 .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => $"{src.DistanceMeters}m {src.Stroke}"));
-
         }
     }
 }
