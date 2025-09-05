@@ -11,10 +11,13 @@ namespace SwimCheck.API.Repositories
         {
             this.dbContext = dbContext;
         }
-        //public Task<Athlete> CreateAthleteAsync(Athlete athlete)
-        //{
-        //    return
-        //}
+
+        public async Task<Athlete> CreateAthleteAsync(Athlete athlete)
+        {
+            await dbContext.Athletes.AddAsync(athlete);
+            await dbContext.SaveChangesAsync();
+            return athlete;
+        }
 
         public async Task<List<Athlete>> GetAllAthletesAsync(string? filterOn = null, string? filterQuery = null,
             string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
@@ -57,10 +60,12 @@ namespace SwimCheck.API.Repositories
             return await athletes.Skip(skipResults).Take(pageSize).ToListAsync();
         }
 
-        //public Task<Athlete?> GetAthleteByIdAsyncAsync(Guid id)
-        //{
-        //    return
-        //}
+        public async Task<Athlete?> GetAthleteByIdAsync(Guid id)
+        {
+            return await dbContext.Athletes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
 
 
         //public Task<Athlete?> UpdateAthleteAsync(Guid id, Athlete athlete)

@@ -40,7 +40,7 @@ namespace SwimCheck.API.Data
                 {
                     Id = Guid.Parse("e6f2bac7-19ef-4085-8857-439eb1ffec5b"),
                     Name = "Caeleb Dressel",
-                    BirthDate = new DateTime(1998 / 12 / 31),
+                    BirthDate = new DateTime(1998, 12, 31),
                     Club = "SL Benfica"
                 }
             };
