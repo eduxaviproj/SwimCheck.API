@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SwimCheck.API.Models.Domain;
 using SwimCheck.API.Models.DTOs;
 using SwimCheck.API.Repositories;
 
@@ -24,7 +25,7 @@ namespace SwimCheck.API.Controllers
             [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
             var athletes = await athleteRepository.GetAllAthletesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
-            var athletesDTO = mapper.Map<List<Models.DTOs.AthleteReadDTO>>(athletes);
+            var athletesDTO = mapper.Map<List<AthleteDTO>>(athletes);
 
             return Ok(athletesDTO);
         }
@@ -44,7 +45,7 @@ namespace SwimCheck.API.Controllers
                 return NotFound();
             }
 
-            var athleteDTO = mapper.Map<Models.DTOs.AthleteReadDTO>(athleteModel);
+            var athleteDTO = mapper.Map<AthleteDTO>(athleteModel);
 
             return Ok(athleteDTO);
         }
@@ -60,10 +61,39 @@ namespace SwimCheck.API.Controllers
             var createdAthlete = await athleteRepository.CreateAthleteAsync(athleteModel);
 
             //Map created athlete back to DTO
-            var athleteReadDTO = mapper.Map<Models.DTOs.AthleteReadDTO>(createdAthlete);
+            var athleteDTO = mapper.Map<AthleteDTO>(createdAthlete);
 
-            return CreatedAtAction(nameof(GetAthleteById), new { id = athleteReadDTO.Id }, athleteReadDTO);
+            return CreatedAtAction(nameof(GetAthleteById), new { id = athleteDTO.Id }, athleteDTO);
         }
 
+        // PUT: https://portnumber/api/athlete/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateAthlete([FromRoute] Guid id, [FromBody] AthleteUpdateDTO athleteUpdateDTO)
+        {
+            var athleteModel = mapper.Map<Athlete>(athleteUpdateDTO);
+            athleteModel = await athleteRepository.UpdateAthleteAsync(id, athleteModel);
+
+            if (athleteModel == null)
+                return NotFound();
+
+            var athleteDTO = mapper.Map<AthleteDTO>(athleteModel);
+            return Ok(athleteDTO);
+        }
+
+        // DELETE: https://portnumber/api/athlete/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteAthlete([FromRoute] Guid id)
+        {
+            var deletedAthlete = await athleteRepository.DeleteAthleteAsync(id);
+
+            if (deletedAthlete == null)
+                return NotFound();
+
+            var athleteDTO = mapper.Map<AthleteDTO>(deletedAthlete);
+
+            return Ok(athleteDTO);
+        }
     }
 }

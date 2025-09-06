@@ -10,10 +10,11 @@ namespace SwimCheck.API.Mappings
         {
             // Athlete
             CreateMap<Athlete, AthleteCreateDTO>().ReverseMap();
-            CreateMap<Athlete, AthleteReadDTO>();
+            CreateMap<Athlete, AthleteUpdateDTO>().ReverseMap();
+            CreateMap<Athlete, AthleteDTO>().ReverseMap();
 
             //Enroll
-            CreateMap<Enroll, EnrollReadDTO>().ReverseMap();
+            CreateMap<Enroll, EnrollUpdateDTO>().ReverseMap();
             CreateMap<Enroll, EnrollCreateDTO>().ReverseMap();
 
             //Race
@@ -23,7 +24,7 @@ namespace SwimCheck.API.Mappings
                 // dto -> entity (string -> enum)
                 .ForMember(d => d.Stroke, o => o.MapFrom(s => Enum.Parse<Stroke>(s.Stroke, true)));
 
-            CreateMap<Race, RaceReadDTO>()
+            CreateMap<Race, RaceUpdateDTO>()
                 .ForMember(dest => dest.Stroke, opt => opt.MapFrom(src => src.Stroke.ToString()))
                 .ForMember(dest => dest.DisplayName, opt => opt.MapFrom(src => $"{src.DistanceMeters}m {src.Stroke}"));
         }

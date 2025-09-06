@@ -68,14 +68,35 @@ namespace SwimCheck.API.Repositories
         }
 
 
-        //public Task<Athlete?> UpdateAthleteAsync(Guid id, Athlete athlete)
-        //{
-        //    return
-        //}
+        public async Task<Athlete?> UpdateAthleteAsync(Guid id, Athlete athlete)
+        {
+            var existingAthlete = await dbContext.Athletes.FirstOrDefaultAsync(x => x.Id == id);
 
-        //public Task<Athlete?> DeleteAthleteAsync(Guid id)
-        //{
-        //    return
-        //}
+            if (existingAthlete == null)
+            {
+                return null;
+            }
+
+            existingAthlete.Name = athlete.Name;
+            existingAthlete.BirthDate = athlete.BirthDate;
+            existingAthlete.Club = athlete.Club;
+
+            await dbContext.SaveChangesAsync();
+
+            return existingAthlete;
+        }
+
+        public async Task<Athlete?> DeleteAthleteAsync(Guid id)
+        {
+            var existingAthlete = await dbContext.Athletes.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (existingAthlete == null)
+            { return null; }
+
+            dbContext.Athletes.Remove(existingAthlete);
+            await dbContext.SaveChangesAsync();
+
+            return existingAthlete;
+        }
     }
 }
