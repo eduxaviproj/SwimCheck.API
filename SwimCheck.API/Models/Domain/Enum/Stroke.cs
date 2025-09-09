@@ -1,4 +1,4 @@
-﻿namespace SwimCheck.API.Models.Domain
+﻿namespace SwimCheck.API.Models.Domain.Enum
 {
     public enum Stroke
     {

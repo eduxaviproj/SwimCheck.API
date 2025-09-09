@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SwimCheck.API.Data;
 using SwimCheck.API.Models.Domain;
+using SwimCheck.API.Repositories.Interfaces;
 
-namespace SwimCheck.API.Repositories
+namespace SwimCheck.API.Repositories.Repos
 {
     public class SQLAthleteRepository : IAthleteRepository
     {

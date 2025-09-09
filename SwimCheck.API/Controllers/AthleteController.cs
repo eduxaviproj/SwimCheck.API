@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SwimCheck.API.Models.Domain;
-using SwimCheck.API.Models.DTOs;
-using SwimCheck.API.Repositories;
+using SwimCheck.API.Models.DTOs.AthleteDTOs;
+using SwimCheck.API.Repositories.Interfaces;
 
 namespace SwimCheck.API.Controllers
 {
@@ -24,8 +24,8 @@ namespace SwimCheck.API.Controllers
         public async Task<IActionResult> GetAllAthletes([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
-            var athletes = await athleteRepository.GetAllAthletesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
-            var athletesDTO = mapper.Map<List<AthleteDTO>>(athletes);
+            var athletesModel = await athleteRepository.GetAllAthletesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
+            var athletesDTO = mapper.Map<List<AthleteViewDTO>>(athletesModel);
 
             return Ok(athletesDTO);
         }
@@ -45,7 +45,7 @@ namespace SwimCheck.API.Controllers
                 return NotFound();
             }
 
-            var athleteDTO = mapper.Map<AthleteDTO>(athleteModel);
+            var athleteDTO = mapper.Map<AthleteViewDTO>(athleteModel);
 
             return Ok(athleteDTO);
         }
@@ -61,7 +61,7 @@ namespace SwimCheck.API.Controllers
             var createdAthlete = await athleteRepository.CreateAthleteAsync(athleteModel);
 
             //Map created athlete back to DTO
-            var athleteDTO = mapper.Map<AthleteDTO>(createdAthlete);
+            var athleteDTO = mapper.Map<AthleteViewDTO>(createdAthlete);
 
             return CreatedAtAction(nameof(GetAthleteById), new { id = athleteDTO.Id }, athleteDTO);
         }
@@ -77,7 +77,7 @@ namespace SwimCheck.API.Controllers
             if (athleteModel == null)
                 return NotFound();
 
-            var athleteDTO = mapper.Map<AthleteDTO>(athleteModel);
+            var athleteDTO = mapper.Map<AthleteViewDTO>(athleteModel);
             return Ok(athleteDTO);
         }
 
@@ -91,7 +91,7 @@ namespace SwimCheck.API.Controllers
             if (deletedAthlete == null)
                 return NotFound();
 
-            var athleteDTO = mapper.Map<AthleteDTO>(deletedAthlete);
+            var athleteDTO = mapper.Map<AthleteViewDTO>(deletedAthlete);
 
             return Ok(athleteDTO);
         }

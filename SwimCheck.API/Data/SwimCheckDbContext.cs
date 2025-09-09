@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SwimCheck.API.Models.Domain;
+using SwimCheck.API.Models.Domain.Enum;
 
 namespace SwimCheck.API.Data
 {

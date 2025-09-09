@@ -1,4 +1,7 @@
-﻿namespace SwimCheck.API.Models.DTOs
+﻿using SwimCheck.API.Models.DTOs.AthleteDTOs;
+using SwimCheck.API.Models.DTOs.RaceDTOs;
+
+namespace SwimCheck.API.Models.DTOs.EnrollDTOs
 {
     public class EnrollUpdateDTO
     {

@@ -1,6 +1,6 @@
 ﻿using SwimCheck.API.Models.Domain;
 
-namespace SwimCheck.API.Repositories
+namespace SwimCheck.API.Repositories.Interfaces
 {
     public interface IAthleteRepository
     {
