@@ -29,9 +29,9 @@ namespace SwimCheck.API.Repositories.Repos
             //Filtering
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
             {
-                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+                if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))// what is written in the filterOn query string
                 {
-                    athletes = athletes.Where(x => x.Name.Contains(filterQuery));
+                    athletes = athletes.Where(x => x.Name.Contains(filterQuery)); // what query we are looking for
                 }
                 else if
                     (filterOn.Equals("Club", StringComparison.OrdinalIgnoreCase))

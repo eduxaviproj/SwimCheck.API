@@ -25,8 +25,8 @@ namespace SwimCheck.API.Repositories.Repos
             {
                 if (filterOn.Equals("Stroke", StringComparison.OrdinalIgnoreCase))
                 {
-                    if (Enum.TryParse<Stroke>(filterQuery, true, out var stroke))
-                        races = races.Where(r => r.Stroke == stroke);
+                    if (Enum.TryParse<Stroke>(filterQuery, true, out var stroke)) // convert string to Enum Stroke 
+                        races = races.Where(r => r.Stroke == stroke); // do the command to filter by Stroke
                 }
                 else if (filterOn.Equals("Distance", StringComparison.OrdinalIgnoreCase) ||
                          filterOn.Equals("DistanceMeters", StringComparison.OrdinalIgnoreCase))
@@ -63,5 +63,46 @@ namespace SwimCheck.API.Repositories.Repos
             var skipResults = (pageNumber - 1) * pageSize;
             return await races.Skip(skipResults).Take(pageSize).ToListAsync();
         }
+
+        public async Task<Race?> GetRaceByIdAsync(Guid id)
+        {
+            return await dbContext.Races.FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        public async Task<Race> CreateRaceAsync(Race race)
+        {
+            await dbContext.Races.AddAsync(race);
+            await dbContext.SaveChangesAsync();
+
+            return race;
+        }
+
+        public async Task<Race?> UpdateRaceAsync(Guid id, Race race)
+        {
+            var existingRace = await dbContext.Races.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (existingRace == null)
+            { return null; }
+
+            existingRace.Stroke = race.Stroke;
+            existingRace.DistanceMeters = race.DistanceMeters;
+            await dbContext.SaveChangesAsync();
+
+            return existingRace;
+        }
+
+        public async Task<Race?> DeleteRaceAsync(Guid id)
+        {
+            var existingRace = await dbContext.Races.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (existingRace == null)
+            { return null; }
+
+            dbContext.Races.Remove(existingRace);
+            await dbContext.SaveChangesAsync();
+
+            return existingRace;
+        }
+
     }
 }

@@ -4,7 +4,10 @@ namespace SwimCheck.API.Repositories.Interfaces
 {
     public interface IRaceRepository
     {
+        public Task<Race?> GetRaceByIdAsync(Guid id);
         public Task<List<Race>> GetAllRacesAsync(string? filterOn, string? filterQuery, string? sortBy, bool isAscending = true, int pageNumber = 1, int pageSize = 1000);
-        //public Task<Race?> GetRaceByIdAsync(Guid id);
+        public Task<Race> CreateRaceAsync(Race race);
+        public Task<Race?> UpdateRaceAsync(Guid id, Race race);
+        public Task<Race?> DeleteRaceAsync(Guid id);
     }
 }
