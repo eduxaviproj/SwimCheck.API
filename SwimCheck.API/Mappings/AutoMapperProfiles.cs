@@ -25,9 +25,15 @@ namespace SwimCheck.API.Mappings
 
 
             // --------- ENROLL ----------
-            CreateMap<Enroll, EnrollUpdateDTO>().ReverseMap();
-            CreateMap<Enroll, EnrollCreateDTO>().ReverseMap();
-            CreateMap<Enroll, EnrollViewDTO>().ReverseMap();
+            //CreateMap<Enroll, EnrollUpdateDTO>().ReverseMap(); // Not needed, if so, delete Enroll and create a new one
+            CreateMap<EnrollCreateDTO, Enroll>()
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.Athlete, o => o.Ignore())
+                .ForMember(d => d.Race, o => o.Ignore());
+
+            CreateMap<Enroll, EnrollViewDTO>()
+                .ForMember(d => d.AthleteName, o => o.MapFrom(s => s.Athlete.Name))
+                .ForMember(d => d.RaceDisplayName, o => o.MapFrom(s => $"{s.Race.DistanceMeters}m {s.Race.Stroke}"));
 
 
             // --------- RACE ----------
