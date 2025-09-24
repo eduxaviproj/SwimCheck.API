@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SwimCheck.API.Data;
 using SwimCheck.API.Mappings;
 using SwimCheck.API.Repositories.Interfaces;
 using SwimCheck.API.Repositories.Repos;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,14 +20,51 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<SwimCheckDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// AutoMapper
-builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
-
 // Repositories
 builder.Services.AddScoped<IAthleteRepository, SQLAthleteRepository>();
 builder.Services.AddScoped<IRaceRepository, SQLRaceRepository>();
 builder.Services.AddScoped<IEnrollRepository, SQLEnrollRepository>();
 
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+
+//Key = name of the property with error, Value = list of error messages | generic response
+
+//builder.Services.AddControllers()
+//    .ConfigureApiBehaviorOptions(options =>
+//    {
+//        options.InvalidModelStateResponseFactory = context =>
+//        {
+//            var erros = context.ModelState
+//                .Where(e => e.Value!.Errors.Count > 0)
+//                .ToDictionary(
+//                    e => e.Key,
+//                    e => e.Value!.Errors.Select(er => er.ErrorMessage)); 
+//            var payload = new
+//            {
+//                Mensagem = "Os dados enviados são inválidos",
+//                Erros = erros
+//            };
+
+//            return new BadRequestObjectResult(payload);
+//        };
+//    });
+
+
+// JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    });
 
 var app = builder.Build();
 
@@ -37,6 +77,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

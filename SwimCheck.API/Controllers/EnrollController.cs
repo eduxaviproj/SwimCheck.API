@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SwimCheck.API.Models.Domain;
 using SwimCheck.API.Models.DTOs.EnrollDTOs;
 using SwimCheck.API.Repositories.Interfaces;
 
@@ -34,7 +35,7 @@ namespace SwimCheck.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateEnroll([FromBody] EnrollCreateDTO enrollCreateDTO)
         {
-            var enrollModel = mapper.Map<Models.Domain.Enroll>(enrollCreateDTO);
+            var enrollModel = mapper.Map<Enroll>(enrollCreateDTO);
 
             var createdEnroll = await enrollRepository.CreateEnrollAsync(enrollModel);
 

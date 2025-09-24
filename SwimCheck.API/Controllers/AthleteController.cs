@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwimCheck.API.Models.Domain;
 using SwimCheck.API.Models.DTOs.AthleteDTOs;
@@ -7,6 +8,7 @@ using SwimCheck.API.Repositories.Interfaces;
 namespace SwimCheck.API.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AthleteController : ControllerBase
     {
