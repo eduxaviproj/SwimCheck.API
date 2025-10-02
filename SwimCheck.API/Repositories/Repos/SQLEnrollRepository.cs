@@ -60,6 +60,7 @@ namespace SwimCheck.API.Repositories.Repos
 
             // Pagination
             var skipResults = (pageNumber - 1) * pageSize;
+
             return enrolls.Skip(skipResults).Take(pageSize).ToListAsync();
         }
 

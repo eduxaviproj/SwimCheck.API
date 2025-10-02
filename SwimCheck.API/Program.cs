@@ -21,7 +21,7 @@ builder.Services.AddDbContext<SwimCheckDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SwimCheckConnectionString")));
 
 builder.Services.AddDbContext<SwimCheckAuthDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SwimCheckAuthDbContext")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SwimCheckAuthConnectionString")));
 
 // Repositories
 builder.Services.AddScoped<IAthleteRepository, SQLAthleteRepository>();
