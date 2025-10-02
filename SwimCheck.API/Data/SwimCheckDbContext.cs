@@ -6,7 +6,7 @@ namespace SwimCheck.API.Data
 {
     public class SwimCheckDbContext : DbContext
     {
-        public SwimCheckDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public SwimCheckDbContext(DbContextOptions<SwimCheckDbContext> dbContextOptions) : base(dbContextOptions)
         {
         }
         public DbSet<Athlete> Athletes { get; set; }
@@ -21,7 +21,7 @@ namespace SwimCheck.API.Data
             modelBuilder.Entity<Enroll>(e => { e.HasIndex(x => new { x.AthleteId, x.RaceId }).IsUnique(); });
 
             //SEED DATA TO ATHLETE TABLE
-            var Athletes = new List<Athlete>
+            var athletes = new List<Athlete>
             {
                 new Athlete
                 {
@@ -45,11 +45,11 @@ namespace SwimCheck.API.Data
                     Club = "SL Benfica"
                 }
             };
-            modelBuilder.Entity<Athlete>().HasData(Athletes); // Seed the athletes to DB
+            modelBuilder.Entity<Athlete>().HasData(athletes); // Seed the athletes to DB
 
 
             //SEED DATA TO RACE TABLE
-            var Races = new List<Race>
+            var races = new List<Race>
             {
                 new Race
                 {
@@ -77,7 +77,7 @@ namespace SwimCheck.API.Data
                 }
             };
             modelBuilder.Entity<Race>(e => { e.Property(x => x.Stroke).HasConversion<string>(); }); // Convert enum to string
-            modelBuilder.Entity<Race>().HasData(Races); // Seed the races to DB
+            modelBuilder.Entity<Race>().HasData(races); // Seed the races to DB
 
         }
     }

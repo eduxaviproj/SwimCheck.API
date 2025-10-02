@@ -15,7 +15,7 @@ namespace SwimCheck.API.Mappings
             // CREATE
             CreateMap<AthleteCreateDTO, Athlete>()
                 .ForMember(d => d.Id, o => o.Ignore())
-                .ForMember(d => d.Enrolls, o => o.Ignore());
+                .ForMember(d => d.Enrolls, o => o.Ignore()); // navigation properties ignored
             // UPDATE
             CreateMap<AthleteUpdateDTO, Athlete>()
                 .ForMember(d => d.Id, o => o.Ignore())
@@ -28,8 +28,8 @@ namespace SwimCheck.API.Mappings
             //CreateMap<Enroll, EnrollUpdateDTO>().ReverseMap(); // Not needed, if so, delete Enroll and create a new one
             CreateMap<EnrollCreateDTO, Enroll>()
                 .ForMember(d => d.Id, o => o.Ignore())
-                .ForMember(d => d.Athlete, o => o.Ignore())
-                .ForMember(d => d.Race, o => o.Ignore());
+                .ForMember(d => d.Athlete, o => o.Ignore()) // navigation properties ignored
+                .ForMember(d => d.Race, o => o.Ignore()); // navigation properties ignored
 
             CreateMap<Enroll, EnrollViewDTO>()
                 .ForMember(d => d.AthleteName, o => o.MapFrom(s => s.Athlete.Name))

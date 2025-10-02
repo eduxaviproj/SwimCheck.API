@@ -18,7 +18,10 @@ builder.Services.AddSwaggerGen();
 
 //EF Core + SQL Server
 builder.Services.AddDbContext<SwimCheckDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SwimCheckConnectionString")));
+
+builder.Services.AddDbContext<SwimCheckAuthDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SwimCheckAuthDbContext")));
 
 // Repositories
 builder.Services.AddScoped<IAthleteRepository, SQLAthleteRepository>();
@@ -27,6 +30,20 @@ builder.Services.AddScoped<IEnrollRepository, SQLEnrollRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+// JWT Authentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    });
 
 
 //Key = name of the property with error, Value = list of error messages | generic response
@@ -52,19 +69,6 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 //    });
 
 
-// JWT Authentication
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-    });
 
 var app = builder.Build();
 
