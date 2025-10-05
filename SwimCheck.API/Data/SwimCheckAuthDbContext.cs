@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SwimCheck.API.Data
 {
+    //Seeding Identity Roles and Create DataBase
     public class SwimCheckAuthDbContext : IdentityDbContext
     {
-        public SwimCheckAuthDbContext(DbContextOptions<SwimCheckAuthDbContext> options) : base(options)
+        public SwimCheckAuthDbContext(DbContextOptions<SwimCheckAuthDbContext> options) : base(options) //DbContext of type SwimCheckAuthDbContext, so the API knows what DbContext to trigger
         {
 
         }

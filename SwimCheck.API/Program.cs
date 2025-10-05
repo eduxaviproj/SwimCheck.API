@@ -32,7 +32,7 @@ builder.Services.AddScoped<IEnrollRepository, SQLEnrollRepository>();
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
-// Identity simple user
+// Identity simple user (packages)
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("SwimCheck")
