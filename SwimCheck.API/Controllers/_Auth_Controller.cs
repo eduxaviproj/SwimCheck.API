@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SwimCheck.API.Models.DTOs;
+using SwimCheck.API.Models.DTOs._Auth_;
 
 namespace SwimCheck.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class _Auth_Controller : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
-        public AuthController(UserManager<IdentityUser> userManager) // UserManager class comes from Identity nugget package
+        public _Auth_Controller(UserManager<IdentityUser> userManager) // UserManager class comes from Identity nugget package and DI at Startup.cs
         {
             this.userManager = userManager;
         }
 
+        //Register Functionality for users
         // POST: /api/Auth/Register
         [HttpPost]
         [Route("Register")]
@@ -44,5 +45,30 @@ namespace SwimCheck.API.Controllers
             return BadRequest("Something went wrong!");
 
         }
+
+        // Login
+        // POST: /api/Auth/Register
+        [HttpPost]
+        [Route("Login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+        {
+
+            var user = await userManager.FindByEmailAsync(loginRequestDTO.Username); //find user by Email/Username
+
+            if (user != null)
+            {
+                var checkPasswordResult = await userManager.CheckPasswordAsync(user, loginRequestDTO.Password); //check if the user found matches the password
+
+                if (checkPasswordResult)
+                {
+                    //Create Token
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Username or password incorrect");
+
+        }
+
     }
 }
