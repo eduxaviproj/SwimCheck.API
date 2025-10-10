@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SwimCheck.API.Models.DTOs._Auth_;
+using SwimCheck.API.Repositories.Interfaces;
 
 namespace SwimCheck.API.Controllers
 {
@@ -9,15 +11,19 @@ namespace SwimCheck.API.Controllers
     public class _Auth_Controller : ControllerBase
     {
         private readonly UserManager<IdentityUser> userManager;
-        public _Auth_Controller(UserManager<IdentityUser> userManager) // UserManager class comes from Identity nugget package and DI at Startup.cs
+        private readonly ITokenRepository tokenRepository;
+
+        public _Auth_Controller(UserManager<IdentityUser> userManager, ITokenRepository tokenRepository) // UserManager class comes from Identity nugget package and DI at Startup.cs
         {
             this.userManager = userManager;
+            this.tokenRepository = tokenRepository;
         }
 
         //Register Functionality for users
         // POST: /api/Auth/Register
         [HttpPost]
         [Route("Register")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
             var identityUser = new IdentityUser
@@ -61,8 +67,21 @@ namespace SwimCheck.API.Controllers
 
                 if (checkPasswordResult)
                 {
-                    //Create Token
-                    return Ok();
+                    //Get Roles for this user
+                    var roles = await userManager.GetRolesAsync(user);
+
+                    if (roles != null)
+                    {
+                        //Create Token
+                        var jwtToken = tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                        var response = new LoginResponseDTO
+                        {
+                            jwtToken = jwtToken,
+                        };
+
+                        return Ok(response);
+                    }
                 }
             }
 

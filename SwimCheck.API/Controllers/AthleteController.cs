@@ -23,6 +23,7 @@ namespace SwimCheck.API.Controllers
 
         // GET: https://portnumber/api/athlete
         [HttpGet]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAllAthletes([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
             [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
         {
@@ -35,6 +36,7 @@ namespace SwimCheck.API.Controllers
         // GET: https://portnumber/api/athlete/{id}
         [HttpGet]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAthleteById([FromRoute] Guid id)
         {
             if (id == Guid.Empty)
@@ -54,6 +56,7 @@ namespace SwimCheck.API.Controllers
 
         // POST: https://portnumber/api/athlete
         [HttpPost]
+        [Authorize(Roles = "Writer, Admin")]
         public async Task<IActionResult> CreateAthlete([FromBody] AthleteCreateDTO athleteCreateDTO)
         {
             //map DTO to Domain Model
@@ -71,6 +74,7 @@ namespace SwimCheck.API.Controllers
         // PUT: https://portnumber/api/athlete/{id}
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateAthlete([FromRoute] Guid id, [FromBody] AthleteUpdateDTO athleteUpdateDTO)
         {
             var athleteModel = mapper.Map<Athlete>(athleteUpdateDTO);
@@ -86,6 +90,7 @@ namespace SwimCheck.API.Controllers
         // DELETE: https://portnumber/api/athlete/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteAthlete([FromRoute] Guid id)
         {
             var deletedAthlete = await athleteRepository.DeleteAthleteAsync(id);

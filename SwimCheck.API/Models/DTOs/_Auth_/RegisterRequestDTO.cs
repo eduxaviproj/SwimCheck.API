@@ -12,6 +12,6 @@ namespace SwimCheck.API.Models.DTOs._Auth_
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string[] Roles;
+        public string[] Roles { get; set; }
     }
 }

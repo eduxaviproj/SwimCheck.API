@@ -17,8 +17,6 @@ namespace SwimCheck.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Ensure that an athlete can only enroll once
-            modelBuilder.Entity<Enroll>(e => { e.HasIndex(x => new { x.AthleteId, x.RaceId }).IsUnique(); });
 
             //SEED DATA TO ATHLETE TABLE
             var athletes = new List<Athlete>
@@ -78,6 +76,23 @@ namespace SwimCheck.API.Data
             };
             modelBuilder.Entity<Race>(e => { e.Property(x => x.Stroke).HasConversion<string>(); }); // Convert enum to string
             modelBuilder.Entity<Race>().HasData(races); // Seed the races to DB
+
+
+
+            // Ensure that an athlete can only enroll once
+            modelBuilder.Entity<Enroll>(e => { e.HasIndex(x => new { x.AthleteId, x.RaceId }).IsUnique(); });
+
+            modelBuilder.Entity<Enroll>() // avoid deleting athlete if already enrolled
+                .HasOne(e => e.Athlete)
+                .WithMany(a => a.Enrolls)
+                .HasForeignKey(e => e.AthleteId)
+                .OnDelete(DeleteBehavior.Restrict); // ou .NoAction()
+
+            modelBuilder.Entity<Enroll>() // avoid deleting race if already enrolled
+                .HasOne(e => e.Race)
+                .WithMany(r => r.Enrolls)
+                .HasForeignKey(e => e.RaceId)
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

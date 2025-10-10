@@ -28,6 +28,7 @@ builder.Services.AddDbContext<SwimCheckAuthDbContext>(options =>
 builder.Services.AddScoped<IAthleteRepository, SQLAthleteRepository>();
 builder.Services.AddScoped<IRaceRepository, SQLRaceRepository>();
 builder.Services.AddScoped<IEnrollRepository, SQLEnrollRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
