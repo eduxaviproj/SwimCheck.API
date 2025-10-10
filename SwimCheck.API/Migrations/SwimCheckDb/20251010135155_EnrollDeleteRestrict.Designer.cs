@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SwimCheck.API.Data;
 
@@ -11,13 +12,15 @@ using SwimCheck.API.Data;
 namespace SwimCheck.API.Migrations
 {
     [DbContext(typeof(SwimCheckDbContext))]
-    partial class SwimCheckDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251010135155_EnrollDeleteRestrict")]
+    partial class EnrollDeleteRestrict
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.8")
+                .HasAnnotation("ProductVersion", "8.0.20")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -142,13 +145,13 @@ namespace SwimCheck.API.Migrations
                     b.HasOne("SwimCheck.API.Models.Domain.Athlete", "Athlete")
                         .WithMany("Enrolls")
                         .HasForeignKey("AthleteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("SwimCheck.API.Models.Domain.Race", "Race")
                         .WithMany("Enrolls")
                         .HasForeignKey("RaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Athlete");
