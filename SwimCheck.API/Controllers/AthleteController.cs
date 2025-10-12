@@ -8,7 +8,6 @@ using SwimCheck.API.Repositories.Interfaces;
 namespace SwimCheck.API.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class AthleteController : ControllerBase
     {
@@ -25,7 +24,7 @@ namespace SwimCheck.API.Controllers
         [HttpGet]
         [Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetAllAthletes([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
-            [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
         {
             var athletesModel = await athleteRepository.GetAllAthletesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
             var athletesDTO = mapper.Map<List<AthleteViewDTO>>(athletesModel);
@@ -74,7 +73,7 @@ namespace SwimCheck.API.Controllers
         // PUT: https://portnumber/api/athlete/{id}
         [HttpPut]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Writer")]
+        [Authorize(Roles = "Writer, Admin")]
         public async Task<IActionResult> UpdateAthlete([FromRoute] Guid id, [FromBody] AthleteUpdateDTO athleteUpdateDTO)
         {
             var athleteModel = mapper.Map<Athlete>(athleteUpdateDTO);
@@ -90,7 +89,7 @@ namespace SwimCheck.API.Controllers
         // DELETE: https://portnumber/api/athlete/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
-        [Authorize(Roles = "Writer")]
+        [Authorize(Roles = "Writer, Admin")]
         public async Task<IActionResult> DeleteAthlete([FromRoute] Guid id)
         {
             var deletedAthlete = await athleteRepository.DeleteAthleteAsync(id);

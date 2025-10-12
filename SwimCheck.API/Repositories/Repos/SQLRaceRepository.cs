@@ -16,7 +16,7 @@ namespace SwimCheck.API.Repositories.Repos
 
 
         public async Task<List<Race>> GetAllRacesAsync(string? filterOn = null, string? filterQuery = null,
-            string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+            string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 20)
         {
             var races = dbContext.Races.AsNoTracking().AsQueryable();
 

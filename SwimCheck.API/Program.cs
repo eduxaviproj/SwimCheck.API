@@ -25,8 +25,10 @@ builder.Services.AddSwaggerGen(options =>
     {
         Name = "Authorization",
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey,
-        Scheme = JwtBearerDefaults.AuthenticationScheme
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+
+        BearerFormat = "JWT" //So the SwaggerUI knows how to format the token with "Bearer {token}"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -39,9 +41,6 @@ builder.Services.AddSwaggerGen(options =>
                     Type = ReferenceType.SecurityScheme,
                     Id = JwtBearerDefaults.AuthenticationScheme
                 },
-                Scheme = "oauth2",
-                Name = JwtBearerDefaults.AuthenticationScheme,
-                In = ParameterLocation.Header,
             },
             new List<string>()
         },
@@ -66,6 +65,9 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
+
+
+
 
 // Identity simple user (packages)
 builder.Services.AddIdentityCore<IdentityUser>()

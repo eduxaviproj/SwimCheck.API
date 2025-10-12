@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwimCheck.API.Models.Domain;
 using SwimCheck.API.Models.DTOs.RaceDTOs;
@@ -20,8 +21,9 @@ namespace SwimCheck.API.Controllers
 
         // GET: https://portnumber/api
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllRaces([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
-            [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 1000)
+            [FromQuery] string? sortBy, [FromQuery] bool? isAscending, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
         {
             var racesModel = await raceRepository.GetAllRacesAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
             var racesDTO = mapper.Map<List<RaceViewDTO>>(racesModel);
@@ -31,6 +33,7 @@ namespace SwimCheck.API.Controllers
 
         // GET: https://portnumber/api
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         [Route("{id:guid}")]
         public async Task<IActionResult> GetRaceById([FromRoute] Guid id)
         {
@@ -46,6 +49,7 @@ namespace SwimCheck.API.Controllers
 
         // POST: https://portnumber/api
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateRace([FromBody] RaceCreateDTO raceCreateDTO)
         {
             var raceModel = mapper.Map<Race>(raceCreateDTO); // map DTO to Domain model
@@ -60,6 +64,7 @@ namespace SwimCheck.API.Controllers
         // PUT: https://portnumber/api
         [HttpPut]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateRace([FromRoute] Guid id, [FromBody] RaceUpdateDTO raceUpdateDTO)
         {
             var raceModel = mapper.Map<Race>(raceUpdateDTO);
@@ -77,6 +82,7 @@ namespace SwimCheck.API.Controllers
         // DELETE: https://portnumber/api
         [HttpDelete]
         [Route("{id:guid}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteRace([FromRoute] Guid id)
         {
             var raceModel = await raceRepository.DeleteRaceAsync(id);

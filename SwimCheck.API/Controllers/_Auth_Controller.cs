@@ -20,7 +20,7 @@ namespace SwimCheck.API.Controllers
         }
 
         //Register Functionality for users
-        // POST: /api/Auth/Register
+        // POST: /api/_Auth_/Register
         [HttpPost]
         [Route("Register")]
         [Authorize(Roles = "Admin")]
@@ -53,8 +53,9 @@ namespace SwimCheck.API.Controllers
         }
 
         // Login
-        // POST: /api/Auth/Register
+        // POST: /api/_Auth_/Login
         [HttpPost]
+        [AllowAnonymous]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {

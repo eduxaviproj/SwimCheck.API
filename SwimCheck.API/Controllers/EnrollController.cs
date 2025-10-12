@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SwimCheck.API.Models.Domain;
 using SwimCheck.API.Models.DTOs.EnrollDTOs;
@@ -21,6 +22,7 @@ namespace SwimCheck.API.Controllers
 
         // GET: https://portnumber/api/enroll
         [HttpGet]
+        [Authorize(Roles = "Reader")]
         public async Task<ActionResult<IEnumerable<EnrollViewDTO>>> GetAllEnrolls([FromQuery] string? filterOn, [FromQuery] string? filterQuery,
                                                                                     [FromQuery] string? sortBy, [FromQuery] bool isAscending = true,
                                                                                         [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 20)
@@ -33,6 +35,7 @@ namespace SwimCheck.API.Controllers
 
         // POST: https://portnumber/api/enroll
         [HttpPost]
+        [Authorize(Roles = "Writer, Admin")]
         public async Task<IActionResult> CreateEnroll([FromBody] EnrollCreateDTO enrollCreateDTO)
         {
             var enrollModel = mapper.Map<Enroll>(enrollCreateDTO);
@@ -48,6 +51,7 @@ namespace SwimCheck.API.Controllers
 
         // GET: https://portnumber/api/enroll/{id}
         [HttpGet]
+        [Authorize(Roles = "Reader")]
         [Route("{id:guid}")]
         public async Task<IActionResult> GetEnrollById([FromRoute] Guid id)
         {
@@ -62,6 +66,7 @@ namespace SwimCheck.API.Controllers
 
         // DELETE: https://portnumber/api/enroll/{id}
         [HttpDelete]
+        [Authorize(Roles = "Writer, Admin")]
         [Route("{id:guid}")]
         public async Task<IActionResult> DeleteEnrollAsync([FromRoute] Guid id)
         {

@@ -21,10 +21,10 @@ namespace SwimCheck.API.Repositories.Repos
         }
 
         public async Task<List<Athlete>> GetAllAthletesAsync(string? filterOn = null, string? filterQuery = null,
-            string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 1000)
+            string? sortBy = null, bool isAscending = true, int pageNumber = 1, int pageSize = 20)
         {
             //return await dbContext.Athletes.ToListAsync(); //old code without filtering, sorting, pagination
-            var athletes = dbContext.Athletes.AsQueryable();
+            var athletes = dbContext.Athletes.AsQueryable(); //prepare the query
 
             //Filtering
             if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery) == false)
@@ -58,7 +58,7 @@ namespace SwimCheck.API.Repositories.Repos
             //Pagination
             var skipResults = (pageNumber - 1) * pageSize;
 
-            return await athletes.Skip(skipResults).Take(pageSize).ToListAsync();
+            return await athletes.Skip(skipResults).Take(pageSize).ToListAsync(); //execute the query and return the result
         }
 
         public async Task<Athlete?> GetAthleteByIdAsync(Guid id)
