@@ -27,8 +27,8 @@ builder.Services.AddSwaggerGen(options =>
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
-
-        BearerFormat = "JWT" //So the SwaggerUI knows how to format the token with "Bearer {token}"
+        //So the SwaggerUI knows how to format the token with "Bearer {token}"
+        BearerFormat = "JWT"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -69,7 +69,7 @@ builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 
 
-// Identity simple user (packages)
+// Identity simple user (packages) manage roles
 builder.Services.AddIdentityCore<IdentityUser>()
     .AddRoles<IdentityRole>()
     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("SwimCheck")
